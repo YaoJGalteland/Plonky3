@@ -18,12 +18,7 @@ use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::{EnvFilter, Registry};
 
-#[cfg(feature = "parallel")]
-type Dft = p3_dft::Radix2DitParallel<BabyBear>;
-#[cfg(not(feature = "parallel"))]
-type Dft = p3_dft::Radix2Bowers;
-
-const NUM_HASHES: usize = 16384;
+const TRACE_LENGTH: u8 = 20;
 
 fn main() -> Result<(), impl Debug> {
     let env_filter = EnvFilter::builder()
