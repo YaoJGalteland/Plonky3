@@ -78,6 +78,7 @@ where
     let fri_config = create_benchmark_fri_config(challenge_mmcs);
 
     let trace = proof_goal.generate_trace_rows(num_hashes, fri_config.log_blowup);
+    println!("trace size: {:?} bits", trace.values.len().ilog2());
 
     let pcs = TwoAdicFriPcs::new(dft, val_mmcs, fri_config);
 
@@ -161,6 +162,7 @@ pub fn prove_m31_keccak<
     let fri_config = create_benchmark_fri_config(challenge_mmcs);
 
     let trace = proof_goal.generate_trace_rows(num_hashes, fri_config.log_blowup);
+    println!("trace size: {:?} bits", trace.values.len().ilog2());
 
     let pcs = CirclePcs::new(val_mmcs, fri_config);
 
@@ -203,6 +205,7 @@ where
     let fri_config = create_benchmark_fri_config(challenge_mmcs);
 
     let trace = proof_goal.generate_trace_rows(num_hashes, fri_config.log_blowup);
+    println!("trace size: {:?} bits", trace.values.len().ilog2());
 
     let pcs = CirclePcs::new(val_mmcs, fri_config);
 
