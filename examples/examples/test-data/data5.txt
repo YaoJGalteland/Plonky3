@@ -1,3 +1,0 @@
-Proving 21845 Keccak-F permutations
-[1;32mINFO    [0m generate Keccak trace [ 172ms | 100.00% ]
-trace size: 30 bits
