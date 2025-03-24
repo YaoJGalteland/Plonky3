@@ -1,24 +1,26 @@
 #!/bin/bash
 
-# Initialize sum and count variables for each metric for Poseidon2 and Keccak
-total_prove_time_poseidon2=0
-total_commit_time_poseidon2=0
-total_open_time_poseidon2=0
-total_verify_time_poseidon2=0
-total_proof_size_poseidon2=0
+# Initialize total time and count for each activity
+total_prove_time=0
+total_commit_time=0
+total_open_time=0
+total_proof_size=0
 
-count_prove_poseidon2=0
-count_commit_poseidon2=0
-count_open_poseidon2=0
-count_verify_poseidon2=0
-count_proof_size_poseidon2=0
+count_prove=0
+count_commit=0
+count_open=0
+count_proof_size=0
 
-# Function to compute averages
-compute_average() {
-  if [ "$2" -gt 0 ]; then
-    echo "scale=2; $1 / $2" | bc
+# Function to convert time to seconds (milliseconds to seconds)
+convert_to_seconds() {
+  local time_value="$1"
+
+  if [[ $time_value == *ms ]]; then
+    # Time in milliseconds, convert to seconds
+    echo "$(awk "BEGIN {print ${time_value%ms} / 1000}")"
   else
-    echo "N/A"
+    # Time in seconds, remove 's' suffix
+    echo "${time_value%s}"
   fi
 }
 
@@ -26,50 +28,53 @@ compute_average() {
 for i in $(seq 1 10); do
   file_poseidon2="test-data/data-poseidon2-${i}.txt"
 
-  # Extract times using grep and sed for Poseidon2
-  prove_time_poseidon2=$(grep 'prove \[' "$file_poseidon2" | sed -E 's/.*prove \[ ([0-9.]+)ms.*/\1/')
-  commit_time_poseidon2=$(grep 'commit to trace data' "$file_poseidon2" | sed -E 's/.*commit to trace data \[ ([0-9.]+)ms.*/\1/')
-  open_time_poseidon2=$(grep 'open' "$file_poseidon2" | sed -E 's/.*open \[ ([0-9.]+)ms.*/\1/')
-  verify_time_poseidon2=$(grep 'verify \[' "$file_poseidon2" | sed -E 's/.*verify \[ ([0-9.]+)ms.*/\1/')
-  proof_size_poseidon2=$(grep 'Proof size:' "$file_poseidon2" | sed -E 's/.*Proof size: ([0-9]+) bytes.*/\1/')
+  # Extract times using grep and sed for specific activities in Poseidon2
+  prove_time=$(grep 'prove \[' "$file_poseidon2" | sed -E 's/.*prove \[ ([0-9.]+ms?|[0-9.]+s).*$/\1/')
+  commit_time=$(grep 'commit to trace data' "$file_poseidon2" | sed -E 's/.*commit to trace data \[ ([0-9.]+ms?|[0-9.]+s).*$/\1/')
+  open_time=$(grep 'open \[' "$file_poseidon2" | sed -E 's/.*open \[ ([0-9.]+ms?|[0-9.]+s).*$/\1/')
+  proof_size=$(grep 'Proof size:' "$file_poseidon2" | sed -E 's/.*Proof size: ([0-9]+) bytes.*/\1/')
 
-  # Sum up values if they exist for Poseidon2
-  if [[ -n "$prove_time_poseidon2" ]]; then
-    total_prove_time_poseidon2=$(echo "$total_prove_time_poseidon2 + $prove_time_poseidon2" | bc)
-    count_prove_poseidon2=$((count_prove_poseidon2 + 1))
+  # Process prove time
+  if [[ -n "$prove_time" ]]; then
+    prove_time_in_sec=$(convert_to_seconds "$prove_time")
+    total_prove_time=$(awk "BEGIN {print $total_prove_time + $prove_time_in_sec}")
+    count_prove=$((count_prove + 1))
   fi
 
-  if [[ -n "$commit_time_poseidon2" ]]; then
-    total_commit_time_poseidon2=$(echo "$total_commit_time_poseidon2 + $commit_time_poseidon2" | bc)
-    count_commit_poseidon2=$((count_commit_poseidon2 + 1))
+  # Process commit time
+  if [[ -n "$commit_time" ]]; then
+    commit_time_in_sec=$(convert_to_seconds "$commit_time")
+    total_commit_time=$(awk "BEGIN {print $total_commit_time + $commit_time_in_sec}")
+    count_commit=$((count_commit + 1))
   fi
 
-  if [[ -n "$open_time_poseidon2" ]]; then
-    total_open_time_poseidon2=$(echo "$total_open_time_poseidon2 + $open_time_poseidon2" | bc)
-    count_open_poseidon2=$((count_open_poseidon2 + 1))
+  # Process open time
+  if [[ -n "$open_time" ]]; then
+    open_time_in_sec=$(convert_to_seconds "$open_time")
+    total_open_time=$(awk "BEGIN {print $total_open_time + $open_time_in_sec}")
+    count_open=$((count_open + 1))
   fi
 
-  if [[ -n "$verify_time_poseidon2" ]]; then
-    total_verify_time_poseidon2=$(echo "$total_verify_time_poseidon2 + $verify_time_poseidon2" | bc)
-    count_verify_poseidon2=$((count_verify_poseidon2 + 1))
-  fi
-
-  if [[ -n "$proof_size_poseidon2" ]]; then
-    total_proof_size_poseidon2=$(echo "$total_proof_size_poseidon2 + $proof_size_poseidon2" | bc)
-    count_proof_size_poseidon2=$((count_proof_size_poseidon2 + 1))
+  # Process proof size
+  if [[ -n "$proof_size" ]]; then
+    total_proof_size=$(echo "$total_proof_size + $proof_size" | bc)
+    count_proof_size=$((count_proof_size + 1))
   fi
 done
 
-# Calculate averages for Poseidon2
-average_prove_time_poseidon2=$(compute_average $total_prove_time_poseidon2 $count_prove_poseidon2)
-average_commit_time_poseidon2=$(compute_average $total_commit_time_poseidon2 $count_commit_poseidon2)
-average_open_time_poseidon2=$(compute_average $total_open_time_poseidon2 $count_open_poseidon2)
-average_verify_time_poseidon2=$(compute_average $total_verify_time_poseidon2 $count_verify_poseidon2)
-average_proof_size_poseidon2=$(compute_average $total_proof_size_poseidon2 $count_proof_size_poseidon2)
+# Compute averages for prove, commit, open, and proof size
+compute_average() {
+  local total=$1
+  local count=$2
+  if [ "$count" -gt 0 ]; then
+    echo "$(awk "BEGIN {print $total / $count}")"
+  else
+    echo "N/A"
+  fi
+}
 
 # Print results for Poseidon2
-echo "Poseidon2 - Average Prove time: $average_prove_time_poseidon2 ms"
-echo "Poseidon2 - Average Commit to Trace Data time: $average_commit_time_poseidon2 ms"
-echo "Poseidon2 - Average Open time: $average_open_time_poseidon2 ms"
-echo "Poseidon2 - Average Verify time: $average_verify_time_poseidon2 ms"
-echo "Poseidon2 - Average Proof size: $average_proof_size_poseidon2 bytes"
+echo "Average Prove time: $(compute_average $total_prove_time $count_prove) seconds"
+echo "Average Commit to Trace Data time: $(compute_average $total_commit_time $count_commit) seconds"
+echo "Average Open time: $(compute_average $total_open_time $count_open) seconds"
+echo "Average Proof size: $(compute_average $total_proof_size $count_proof_size) bytes"
