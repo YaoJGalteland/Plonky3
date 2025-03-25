@@ -74,7 +74,7 @@ pub const fn create_test_fri_config<Mmcs>(mmcs: Mmcs) -> FriConfig<Mmcs> {
 /// This configuration represents typical settings used in production-like scenarios.
 pub const fn create_benchmark_fri_config<Mmcs>(mmcs: Mmcs) -> FriConfig<Mmcs> {
     FriConfig {
-        log_blowup: 2,
+        log_blowup: 1,
         log_final_poly_len: 0,
         num_queries: 256,
         proof_of_work_bits: 1,
