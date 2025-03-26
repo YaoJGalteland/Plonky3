@@ -1,39 +1,39 @@
 Proving 21845 Keccak-F permutations
-[1;32mINFO    [0m generate Keccak trace [ 219ms | 100.00% ]
+[1;32mINFO    [0m generate Keccak trace [ 174ms | 100.00% ]
 trace size: 30 bits
-[1;32mINFO    [0m prove [ 13.8s | 2.98% / 100.00% ]
-[1;32mINFO    [0m ┝━ commit to trace data [ 10.6s | 43.12% / 76.42% ]
-[1;32mINFO    [0m │  ┕━ coset_lde_batch [ 4.60s | 33.29% ] dims: 2633x524288 | added_bits: 1
-[1;32mINFO    [0m ┝━ compute quotient polynomial [ 1.55s | 11.20% ]
-[1;32mINFO    [0m ┝━ commit to quotient poly chunks [ 134ms | 0.60% / 0.97% ]
-[1;32mINFO    [0m │  ┝━ coset_lde_batch [ 26.9ms | 0.19% ] dims: 4x524288 | added_bits: 1
-[1;32mINFO    [0m │  ┕━ coset_lde_batch [ 24.1ms | 0.17% ] dims: 4x524288 | added_bits: 1
-[1;32mINFO    [0m ┕━ open [ 1.17s | 0.00% / 8.44% ]
-[1;32mINFO    [0m    ┝━ compute_inverse_denominators [ 38.0ms | 0.28% ]
-[1;32mINFO    [0m    ┝━ evaluate matrix [ 238ms | 0.01% / 1.72% ] dims: 2633x1048576
-[1;32mINFO    [0m    │  ┕━ compute opened values with Lagrange interpolation [ 237ms | 1.71% ]
-[1;32mINFO    [0m    ┝━ evaluate matrix [ 235ms | 0.01% / 1.70% ] dims: 2633x1048576
-[1;32mINFO    [0m    │  ┕━ compute opened values with Lagrange interpolation [ 235ms | 1.70% ]
-[1;32mINFO    [0m    ┝━ evaluate matrix [ 11.4ms | 0.00% / 0.08% ] dims: 4x1048576
-[1;32mINFO    [0m    │  ┕━ compute opened values with Lagrange interpolation [ 11.4ms | 0.08% ]
-[1;32mINFO    [0m    ┝━ evaluate matrix [ 10.4ms | 0.00% / 0.08% ] dims: 4x1048576
-[1;32mINFO    [0m    │  ┕━ compute opened values with Lagrange interpolation [ 10.4ms | 0.08% ]
-[1;32mINFO    [0m    ┝━ reduce matrix quotient [ 465ms | 0.01% / 3.37% ] dims: 2633x1048576
-[1;32mINFO    [0m    │  ┝━ compress mat [ 451ms | 3.26% ]
-[1;32mINFO    [0m    │  ┝━ reduce rows [ 6.70ms | 0.05% ]
-[1;32mINFO    [0m    │  ┕━ reduce rows [ 6.35ms | 0.05% ]
-[1;32mINFO    [0m    ┝━ reduce matrix quotient [ 11.1ms | 0.00% / 0.08% ] dims: 4x1048576
-[1;32mINFO    [0m    │  ┝━ compress mat [ 4.68ms | 0.03% ]
-[1;32mINFO    [0m    │  ┕━ reduce rows [ 6.36ms | 0.05% ]
-[1;32mINFO    [0m    ┝━ reduce matrix quotient [ 10.7ms | 0.00% / 0.08% ] dims: 4x1048576
-[1;32mINFO    [0m    │  ┝━ compress mat [ 4.35ms | 0.03% ]
-[1;32mINFO    [0m    │  ┕━ reduce rows [ 6.30ms | 0.05% ]
-[1;32mINFO    [0m    ┕━ FRI prover [ 146ms | 0.00% / 1.06% ]
-[1;32mINFO    [0m       ┝━ commit phase [ 142ms | 1.02% / 1.03% ]
-[1;32mINFO    [0m       │  ┕━ divide_by_height [ 20.4µs | 0.00% ] dims: 1x2
-[1;32mINFO    [0m       ┝━ grind for proof-of-work witness [ 87.6µs | 0.00% ]
-[1;32mINFO    [0m       ┕━ query phase [ 4.11ms | 0.03% ]
+[1;32mINFO    [0m prove [ 7.30s | 8.47% / 100.00% ]
+[1;32mINFO    [0m ┝━ commit to trace data [ 5.48s | 27.23% / 75.02% ]
+[1;32mINFO    [0m │  ┕━ coset_lde_batch [ 3.49s | 47.80% ] dims: 2633x524288 | added_bits: 1
+[1;32mINFO    [0m ┝━ compute quotient polynomial [ 592ms | 8.11% ]
+[1;32mINFO    [0m ┝━ commit to quotient poly chunks [ 80.0ms | 0.58% / 1.10% ]
+[1;32mINFO    [0m │  ┝━ coset_lde_batch [ 19.8ms | 0.27% ] dims: 4x524288 | added_bits: 1
+[1;32mINFO    [0m │  ┕━ coset_lde_batch [ 17.5ms | 0.24% ] dims: 4x524288 | added_bits: 1
+[1;32mINFO    [0m ┕━ open [ 533ms | 0.00% / 7.30% ]
+[1;32mINFO    [0m    ┝━ compute_inverse_denominators [ 28.2ms | 0.39% ]
+[1;32mINFO    [0m    ┝━ evaluate matrix [ 109ms | 0.01% / 1.50% ] dims: 2633x1048576
+[1;32mINFO    [0m    │  ┕━ compute opened values with Lagrange interpolation [ 109ms | 1.49% ]
+[1;32mINFO    [0m    ┝━ evaluate matrix [ 104ms | 0.01% / 1.42% ] dims: 2633x1048576
+[1;32mINFO    [0m    │  ┕━ compute opened values with Lagrange interpolation [ 103ms | 1.41% ]
+[1;32mINFO    [0m    ┝━ evaluate matrix [ 7.21ms | 0.00% / 0.10% ] dims: 4x1048576
+[1;32mINFO    [0m    │  ┕━ compute opened values with Lagrange interpolation [ 7.21ms | 0.10% ]
+[1;32mINFO    [0m    ┝━ evaluate matrix [ 11.8ms | 0.00% / 0.16% ] dims: 4x1048576
+[1;32mINFO    [0m    │  ┕━ compute opened values with Lagrange interpolation [ 11.8ms | 0.16% ]
+[1;32mINFO    [0m    ┝━ reduce matrix quotient [ 161ms | 0.04% / 2.20% ] dims: 2633x1048576
+[1;32mINFO    [0m    │  ┝━ compress mat [ 152ms | 2.08% ]
+[1;32mINFO    [0m    │  ┝━ reduce rows [ 3.17ms | 0.04% ]
+[1;32mINFO    [0m    │  ┕━ reduce rows [ 3.21ms | 0.04% ]
+[1;32mINFO    [0m    ┝━ reduce matrix quotient [ 6.77ms | 0.00% / 0.09% ] dims: 4x1048576
+[1;32mINFO    [0m    │  ┝━ compress mat [ 3.60ms | 0.05% ]
+[1;32mINFO    [0m    │  ┕━ reduce rows [ 3.17ms | 0.04% ]
+[1;32mINFO    [0m    ┝━ reduce matrix quotient [ 6.72ms | 0.00% / 0.09% ] dims: 4x1048576
+[1;32mINFO    [0m    │  ┝━ compress mat [ 3.56ms | 0.05% ]
+[1;32mINFO    [0m    │  ┕━ reduce rows [ 3.15ms | 0.04% ]
+[1;32mINFO    [0m    ┕━ FRI prover [ 98.4ms | 0.00% / 1.35% ]
+[1;32mINFO    [0m       ┝━ commit phase [ 94.1ms | 1.29% / 1.29% ]
+[1;32mINFO    [0m       │  ┕━ divide_by_height [ 21.5µs | 0.00% ] dims: 1x2
+[1;32mINFO    [0m       ┝━ grind for proof-of-work witness [ 48.0µs | 0.00% ]
+[1;32mINFO    [0m       ┕━ query phase [ 4.21ms | 0.06% ]
 Proof size: 4808876 bytes
-[1;32mINFO    [0m verify [ 673ms | 99.23% / 100.00% ]
-[1;32mINFO    [0m ┕━ infer log of constraint degree [ 5.20ms | 0.77% ]
+[1;32mINFO    [0m verify [ 544ms | 99.32% / 100.00% ]
+[1;32mINFO    [0m ┕━ infer log of constraint degree [ 3.71ms | 0.68% ]
 Proof Verified Successfully
