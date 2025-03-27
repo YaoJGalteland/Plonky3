@@ -76,8 +76,8 @@ pub const fn create_benchmark_fri_config<Mmcs>(mmcs: Mmcs) -> FriConfig<Mmcs> {
     FriConfig {
         log_blowup: 1,
         log_final_poly_len: 0,
-        num_queries: 256,
-        proof_of_work_bits: 1,
+        num_queries: 100,
+        proof_of_work_bits: 16,
         mmcs,
     }
 }
