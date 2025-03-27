@@ -93,5 +93,6 @@ fn main() {
     let mut challenger: DuplexChallenger<Val, Poseidon2KoalaBear<24>, 24, 16> =
         DuplexChallenger::new(perm24.clone());
 
+    // Perform commit and open
     prove_pcs(&config, &mut challenger, trace.clone());
 }
