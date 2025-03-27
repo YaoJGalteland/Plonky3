@@ -1,26 +1,16 @@
-use clap::Parser;
-use p3_baby_bear::{BabyBear, GenericPoseidon2LinearLayersBabyBear, Poseidon2BabyBear};
-use p3_blake3_air::Blake3Air;
 use p3_challenger::{CanSample, DuplexChallenger};
 use p3_commit::{ExtensionMmcs, Pcs, PolynomialSpace};
 use p3_dft::Radix2DitParallel;
-use p3_examples::airs::ProofObjective;
 use p3_examples::dfts::DftChoice;
-use p3_examples::parsers::{DftOptions, FieldOptions, MerkleHashOptions, ProofOptions};
 use p3_examples::proofs::{
-    get_poseidon2_mmcs, prove_m31_keccak, prove_m31_poseidon2, prove_monty31_keccak,
-    prove_monty31_poseidon2, report_result,
+    get_poseidon2_mmcs,
 };
 use p3_field::extension::BinomialExtensionField;
-use p3_fri::{FriConfig, TwoAdicFriPcs, create_benchmark_fri_config};
-use p3_keccak_air::KeccakAir;
-use p3_koala_bear::{GenericPoseidon2LinearLayersKoalaBear, KoalaBear, Poseidon2KoalaBear};
+use p3_fri::{FriConfig, TwoAdicFriPcs};
+use p3_koala_bear::{ KoalaBear, Poseidon2KoalaBear};
 use p3_matrix::Matrix;
 use p3_matrix::dense::RowMajorMatrix;
-use p3_mersenne_31::{GenericPoseidon2LinearLayersMersenne31, Mersenne31, Poseidon2Mersenne31};
-use p3_monty_31::dft::RecursiveDft;
-use p3_poseidon2_air::{RoundConstants, VectorizedPoseidon2Air};
-use p3_uni_stark::{StarkConfig, StarkGenericConfig, Val};
+use p3_uni_stark::{StarkConfig, StarkGenericConfig, Val, verify};
 use rand::{SeedableRng, rng};
 use rand_chacha::ChaCha8Rng;
 use tracing::info_span;
@@ -31,11 +21,11 @@ use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::{EnvFilter, Registry};
 
 // Constants for trace matrix size
-const LOG_TRACE_ROWS: usize = 19;
+const LOG_TRACE_ROWS: usize = 13;
 const LOG_TRACE_COLUMNS: usize = 11;
 
 /// Evaluate the pref commit and open of the Polynomial Commitment Scheme (PCS)
-fn prove_pcs<SC>(config: &SC, challenger: &mut SC::Challenger, trace: RowMajorMatrix<Val<SC>>)
+fn prove_pcs<SC>(config: &SC, proof_challenger: &mut SC::Challenger, verif_challenger: &mut SC::Challenger, trace: RowMajorMatrix<Val<SC>>)
 where
     SC: StarkGenericConfig,
 {
@@ -45,15 +35,25 @@ where
     let trace_domain = pcs.natural_domain_for_degree(degree);
 
     // Commit to trace data
-    let (_trace_commit, trace_data) = info_span!("commit to trace data")
+    let (trace_commit, trace_data) = info_span!("commit to trace data")
         .in_scope(|| pcs.commit(vec![(trace_domain, trace.clone())]));
 
     // Sample challenge
-    let zeta: SC::Challenge = challenger.sample();
+    let zeta: SC::Challenge = proof_challenger.sample();
+    let zeta_next = trace_domain.next_point(zeta).unwrap();
 
     // Open commitments
-    let (_opened_values, _opening_proof) =
-        info_span!("open").in_scope(|| pcs.open(vec![(&trace_data, vec![vec![zeta]])], challenger));
+    let (opened_values, opening_proof) =
+        info_span!("open").in_scope(|| pcs.open(vec![(&trace_data, vec![vec![zeta, zeta_next]])], proof_challenger));
+
+    config.pcs().verify(
+        vec![(trace_commit, vec![(trace_domain, vec![(zeta, opened_values[0][0][0].clone())])])],
+        &opening_proof,
+        verif_challenger,
+    )
+        .expect("verify err");
+
+
 }
 fn main() {
     // Initializes logging
@@ -103,6 +103,12 @@ fn main() {
     let config = StarkConfig::new(pcs);
     let mut proof_challenger: DuplexChallenger<Val, Poseidon2KoalaBear<24>, 24, 16> =
         DuplexChallenger::new(perm24.clone());
+    let mut verif_challenger: DuplexChallenger<Val, Poseidon2KoalaBear<24>, 24, 16> = DuplexChallenger::new(perm24);
 
-    let _proof = prove_pcs(&config, &mut proof_challenger, trace.clone());
+    prove_pcs(&config, &mut proof_challenger, &mut verif_challenger, trace.clone());
+
+
+
+
+
 }
