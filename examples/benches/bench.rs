@@ -68,10 +68,10 @@ fn criterion_benchmark(c: &mut Criterion) {
 
     // Create a FRI configuration with InvRate = 2 (log_blowup = 1)
     let fri_config = FriConfig {
-        log_blowup: 1,
+        log_blowup: 3,
         log_final_poly_len: 0,
-        num_queries: 256,
-        proof_of_work_bits: 1,
+        num_queries: 64,
+        proof_of_work_bits: 0,
         mmcs: challenge_mmcs,
     };
 
