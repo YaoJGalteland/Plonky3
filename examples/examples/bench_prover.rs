@@ -2,15 +2,13 @@ use p3_challenger::{CanSample, DuplexChallenger};
 use p3_commit::{ExtensionMmcs, Pcs, PolynomialSpace};
 use p3_dft::Radix2DitParallel;
 use p3_examples::dfts::DftChoice;
-use p3_examples::proofs::{
-    get_poseidon2_mmcs,
-};
+use p3_examples::proofs::get_poseidon2_mmcs;
 use p3_field::extension::BinomialExtensionField;
 use p3_fri::{FriConfig, TwoAdicFriPcs};
-use p3_koala_bear::{ KoalaBear, Poseidon2KoalaBear};
+use p3_koala_bear::{KoalaBear, Poseidon2KoalaBear};
 use p3_matrix::Matrix;
 use p3_matrix::dense::RowMajorMatrix;
-use p3_uni_stark::{StarkConfig, StarkGenericConfig, Val, verify};
+use p3_uni_stark::{StarkConfig, StarkGenericConfig, Val};
 use rand::{SeedableRng, rng};
 use rand_chacha::ChaCha8Rng;
 use tracing::info_span;
@@ -25,7 +23,7 @@ const LOG_TRACE_ROWS: usize = 19;
 const LOG_TRACE_COLUMNS: usize = 11;
 
 /// Evaluate the pref commit and open of the Polynomial Commitment Scheme (PCS)
-fn prove_pcs<SC>(config: &SC, proof_challenger: &mut SC::Challenger, verif_challenger: &mut SC::Challenger, trace: RowMajorMatrix<Val<SC>>)
+fn prove_pcs<SC>(config: &SC, challenger: &mut SC::Challenger, trace: RowMajorMatrix<Val<SC>>)
 where
     SC: StarkGenericConfig,
 {
@@ -35,25 +33,16 @@ where
     let trace_domain = pcs.natural_domain_for_degree(degree);
 
     // Commit to trace data
-    let (trace_commit, trace_data) = info_span!("commit to trace data")
+    let (_trace_commit, trace_data) = info_span!("commit to trace data")
         .in_scope(|| pcs.commit(vec![(trace_domain, trace.clone())]));
 
     // Sample challenge
-    let zeta: SC::Challenge = proof_challenger.sample();
+    let zeta: SC::Challenge = challenger.sample();
     let zeta_next = trace_domain.next_point(zeta).unwrap();
 
     // Open commitments
-    let (opened_values, opening_proof) =
-        info_span!("open").in_scope(|| pcs.open(vec![(&trace_data, vec![vec![zeta, zeta_next]])], proof_challenger));
-
-    config.pcs().verify(
-        vec![(trace_commit, vec![(trace_domain, vec![(zeta, opened_values[0][0][0].clone())])])],
-        &opening_proof,
-        verif_challenger,
-    )
-        .expect("verify err");
-
-
+    let (_opened_values, _opening_proof) = info_span!("open")
+        .in_scope(|| pcs.open(vec![(&trace_data, vec![vec![zeta, zeta_next]])], challenger));
 }
 fn main() {
     // Initializes logging
@@ -101,14 +90,8 @@ fn main() {
 
     // Constructs the STARK proof system and calls prove_pcs.
     let config = StarkConfig::new(pcs);
-    let mut proof_challenger: DuplexChallenger<Val, Poseidon2KoalaBear<24>, 24, 16> =
+    let mut challenger: DuplexChallenger<Val, Poseidon2KoalaBear<24>, 24, 16> =
         DuplexChallenger::new(perm24.clone());
-    let mut verif_challenger: DuplexChallenger<Val, Poseidon2KoalaBear<24>, 24, 16> = DuplexChallenger::new(perm24);
 
-    prove_pcs(&config, &mut proof_challenger, &mut verif_challenger, trace.clone());
-
-
-
-
-
+    prove_pcs(&config, &mut challenger, trace.clone());
 }
