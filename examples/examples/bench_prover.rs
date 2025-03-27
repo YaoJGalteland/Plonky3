@@ -21,7 +21,7 @@ use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::{EnvFilter, Registry};
 
 // Constants for trace matrix size
-const LOG_TRACE_ROWS: usize = 13;
+const LOG_TRACE_ROWS: usize = 19;
 const LOG_TRACE_COLUMNS: usize = 11;
 
 /// Evaluate the pref commit and open of the Polynomial Commitment Scheme (PCS)
