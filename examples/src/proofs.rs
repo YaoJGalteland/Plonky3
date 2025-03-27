@@ -37,7 +37,7 @@ const fn get_keccak_mmcs<F: Field>() -> KeccakMerkleMmcs<F> {
 /// The first permutation will be used for compression and the second for more sponge hashing.
 /// Currently this is only intended to be used with a pair of Poseidon2 hashes of with 16 and 24
 /// but this can easily be generalised in future if we desire.
-const fn get_poseidon2_mmcs<
+pub fn get_poseidon2_mmcs<
     F: Field,
     Perm16: CryptographicPermutation<[F; 16]> + CryptographicPermutation<[F::Packing; 16]>,
     Perm24: CryptographicPermutation<[F; 24]> + CryptographicPermutation<[F::Packing; 24]>,
