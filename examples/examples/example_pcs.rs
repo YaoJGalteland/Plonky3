@@ -73,7 +73,7 @@ fn main() {
         log_blowup: 3,
         log_final_poly_len: 0,
         num_queries: 64,
-        proof_of_work_bits: 0,
+        proof_of_work_bits: 1,
         mmcs: challenge_mmcs,
     };
 

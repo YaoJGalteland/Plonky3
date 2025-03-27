@@ -6,7 +6,7 @@ use p3_commit::ExtensionMmcs;
 use p3_dft::TwoAdicSubgroupDft;
 use p3_field::extension::{BinomialExtensionField, ComplexExtendable};
 use p3_field::{ExtensionField, Field, PrimeField32, PrimeField64, TwoAdicField};
-use p3_fri::{TwoAdicFriPcs, create_benchmark_fri_config};
+use p3_fri::{TwoAdicFriPcs, create_benchmark_fri_config, FriConfig};
 use p3_keccak::{Keccak256Hash, KeccakF};
 use p3_mersenne_31::Mersenne31;
 use p3_symmetric::{CryptographicPermutation, PaddingFreeSponge, SerializingHasher32To64};
@@ -119,7 +119,13 @@ where
     let val_mmcs = get_poseidon2_mmcs::<F, _, _>(perm16, perm24.clone());
 
     let challenge_mmcs = ExtensionMmcs::<F, EF, _>::new(val_mmcs.clone());
-    let fri_config = create_benchmark_fri_config(challenge_mmcs);
+    let fri_config = FriConfig {
+        log_blowup: 3,
+        log_final_poly_len: 0,
+        num_queries: 64,
+        proof_of_work_bits: 1,
+        mmcs: challenge_mmcs,
+    };
 
     let trace = proof_goal.generate_trace_rows(num_hashes, fri_config.log_blowup);
 
