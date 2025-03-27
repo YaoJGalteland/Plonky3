@@ -31,7 +31,11 @@ itertools.workspace = true
 rand.workspace = true
 serde = { workspace = true, features = ["derive", "alloc"] }
 rand_chacha = "0.9.0"
+criterion = "0.5.1"
 
+[[bench]]
+name = "bench"
+harness = false
 
 [dev-dependencies]
 p3-baby-bear.workspace = true
