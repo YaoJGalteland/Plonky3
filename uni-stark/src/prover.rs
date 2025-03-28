@@ -30,9 +30,9 @@ pub fn prove<
     trace: RowMajorMatrix<Val<SC>>,
     public_values: &Vec<Val<SC>>,
 ) -> Proof<SC>
-where
-    SC: StarkGenericConfig,
-    A: Air<SymbolicAirBuilder<Val<SC>>> + for<'a> Air<ProverConstraintFolder<'a, SC>>,
+    where
+        SC: StarkGenericConfig,
+        A: Air<SymbolicAirBuilder<Val<SC>>> + for<'a> Air<ProverConstraintFolder<'a, SC>>,
 {
     #[cfg(debug_assertions)]
     crate::check_constraints::check_constraints(air, &trace, public_values);
@@ -134,10 +134,10 @@ fn quotient_values<SC, A, Mat>(
     alpha: SC::Challenge,
     constraint_count: usize,
 ) -> Vec<SC::Challenge>
-where
-    SC: StarkGenericConfig,
-    A: for<'a> Air<ProverConstraintFolder<'a, SC>>,
-    Mat: Matrix<Val<SC>> + Sync,
+    where
+        SC: StarkGenericConfig,
+        A: for<'a> Air<ProverConstraintFolder<'a, SC>>,
+        Mat: Matrix<Val<SC>> + Sync,
 {
     let quotient_size = quotient_domain.size();
     let width = trace_on_quotient_domain.width();

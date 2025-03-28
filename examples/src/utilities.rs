@@ -147,7 +147,7 @@ pub fn verify_without_air<SC>(
     Ok(())
 }
 // Constants for trace matrix size
-const LOG_TRACE_ROWS: usize = 19;
+const LOG_TRACE_ROWS: usize = 9;
 const LOG_TRACE_COLUMNS: usize = 11;
 
 #[inline]
