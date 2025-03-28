@@ -6,7 +6,7 @@ use p3_commit::ExtensionMmcs;
 use p3_dft::TwoAdicSubgroupDft;
 use p3_field::extension::{BinomialExtensionField, ComplexExtendable};
 use p3_field::{ExtensionField, Field, PrimeField32, PrimeField64, TwoAdicField};
-use p3_fri::{TwoAdicFriPcs, create_benchmark_fri_config, FriConfig};
+use p3_fri::{TwoAdicFriPcs, create_benchmark_fri_config};
 use p3_keccak::{Keccak256Hash, KeccakF};
 use p3_mersenne_31::Mersenne31;
 use p3_symmetric::{CryptographicPermutation, PaddingFreeSponge, SerializingHasher32To64};
@@ -69,8 +69,8 @@ pub fn prove_monty31_keccak<
     dft: DFT,
     num_hashes: usize,
 ) -> Result<(), impl Debug>
-where
-    StandardUniform: Distribution<F>,
+    where
+        StandardUniform: Distribution<F>,
 {
     let val_mmcs = get_keccak_mmcs();
 
@@ -113,19 +113,13 @@ pub fn prove_monty31_poseidon2<
     perm16: Perm16,
     perm24: Perm24,
 ) -> Result<(), impl Debug>
-where
-    StandardUniform: Distribution<F>,
+    where
+        StandardUniform: Distribution<F>,
 {
     let val_mmcs = get_poseidon2_mmcs::<F, _, _>(perm16, perm24.clone());
 
     let challenge_mmcs = ExtensionMmcs::<F, EF, _>::new(val_mmcs.clone());
-    let fri_config = FriConfig {
-        log_blowup: 3,
-        log_final_poly_len: 0,
-        num_queries: 64,
-        proof_of_work_bits: 1,
-        mmcs: challenge_mmcs,
-    };
+    let fri_config = create_benchmark_fri_config(challenge_mmcs);
 
     let trace = proof_goal.generate_trace_rows(num_hashes, fri_config.log_blowup);
 
@@ -151,9 +145,9 @@ where
 #[inline]
 pub fn prove_m31_keccak<
     PG: ExampleHashAir<
-            Mersenne31,
-            KeccakCircleStarkConfig<Mersenne31, BinomialExtensionField<Mersenne31, 3>>,
-        >,
+        Mersenne31,
+        KeccakCircleStarkConfig<Mersenne31, BinomialExtensionField<Mersenne31, 3>>,
+    >,
 >(
     proof_goal: PG,
     num_hashes: usize,
@@ -199,8 +193,8 @@ pub fn prove_m31_poseidon2<
     perm16: Perm16,
     perm24: Perm24,
 ) -> Result<(), impl Debug>
-where
-    StandardUniform: Distribution<F>,
+    where
+        StandardUniform: Distribution<F>,
 {
     let val_mmcs = get_poseidon2_mmcs::<F, _, _>(perm16, perm24.clone());
 
@@ -240,8 +234,8 @@ pub fn report_result(result: Result<(), impl Debug>) {
 /// Panics if serialization fails.
 #[inline]
 pub fn report_proof_size<SC>(proof: &Proof<SC>)
-where
-    SC: StarkGenericConfig,
+    where
+        SC: StarkGenericConfig,
 {
     let config = bincode::config::standard()
         .with_little_endian()
