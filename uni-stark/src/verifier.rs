@@ -21,9 +21,9 @@ pub fn verify<SC, A>(
     proof: &Proof<SC>,
     public_values: &Vec<Val<SC>>,
 ) -> Result<(), VerificationError<PcsError<SC>>>
-    where
-        SC: StarkGenericConfig,
-        A: Air<SymbolicAirBuilder<Val<SC>>> + for<'a> Air<VerifierConstraintFolder<'a, SC>>,
+where
+    SC: StarkGenericConfig,
+    A: Air<SymbolicAirBuilder<Val<SC>>> + for<'a> Air<VerifierConstraintFolder<'a, SC>>,
 {
     let Proof {
         commitments,
@@ -47,9 +47,9 @@ pub fn verify<SC, A>(
         && opened_values.trace_next.len() == air_width
         && opened_values.quotient_chunks.len() == quotient_degree
         && opened_values
-        .quotient_chunks
-        .iter()
-        .all(|qc| qc.len() == <SC::Challenge as BasedVectorSpace<Val<SC>>>::DIMENSION);
+            .quotient_chunks
+            .iter()
+            .all(|qc| qc.len() == <SC::Challenge as BasedVectorSpace<Val<SC>>>::DIMENSION);
     if !valid_shape {
         return Err(VerificationError::InvalidProofShape);
     }
@@ -94,7 +94,7 @@ pub fn verify<SC, A>(
         opening_proof,
         challenger,
     )
-        .map_err(VerificationError::InvalidOpeningArgument)?;
+    .map_err(VerificationError::InvalidOpeningArgument)?;
 
     let zps = quotient_chunks_domains
         .iter()
@@ -107,8 +107,8 @@ pub fn verify<SC, A>(
                 .map(|(_, other_domain)| {
                     other_domain.vanishing_poly_at_point(zeta)
                         * other_domain
-                        .vanishing_poly_at_point(domain.first_point())
-                        .inverse()
+                            .vanishing_poly_at_point(domain.first_point())
+                            .inverse()
                 })
                 .product::<SC::Challenge>()
         })
@@ -121,9 +121,9 @@ pub fn verify<SC, A>(
         .map(|(ch_i, ch)| {
             zps[ch_i]
                 * ch.iter()
-                .enumerate()
-                .map(|(e_i, &c)| SC::Challenge::ith_basis_element(e_i) * c)
-                .sum::<SC::Challenge>()
+                    .enumerate()
+                    .map(|(e_i, &c)| SC::Challenge::ith_basis_element(e_i) * c)
+                    .sum::<SC::Challenge>()
         })
         .sum::<SC::Challenge>();
 

@@ -22,14 +22,14 @@ criterion.workspace = true
 name = "bench_keccak"
 harness = false
 
-#[[benches]]
+#[[bench]]
 #name = "bench_avx512"
 #harness = false
 #
-#[[benches]]
+#[[bench]]
 #name = "bench_avx2"
 #harness = false
 #
-#[[benches]]
+#[[bench]]
 #name = "bench_avx2split"
 #harness = false
