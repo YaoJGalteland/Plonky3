@@ -128,21 +128,23 @@ pub fn verify_without_air<SC>(
     let zeta: SC::Challenge = challenger.sample();
     let zeta_next = trace_domain.next_point(zeta).unwrap();
 
-    pcs.verify(
-        vec![(
-            commitments.trace.clone(),
-            vec![(
-                trace_domain,
-                vec![
-                    (zeta, opened_values.trace_local.clone()),
-                    (zeta_next, opened_values.trace_next.clone()),
-                ],
-            )],
-        )],
-        opening_proof,
-        challenger,
-    )
-        .map_err(VerificationError::InvalidOpeningArgument)?;
+    let _result =
+        info_span!("Verify").in_scope(||
+            pcs.verify(
+                vec![(
+                    commitments.trace.clone(),
+                    vec![(
+                        trace_domain,
+                        vec![
+                            (zeta, opened_values.trace_local.clone()),
+                            (zeta_next, opened_values.trace_next.clone()),
+                        ],
+                    )],
+                )],
+                opening_proof,
+                challenger,
+            )
+        );
 
     Ok(())
 }
