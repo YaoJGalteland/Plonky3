@@ -33,6 +33,7 @@ members = [
     "symmetric",
     "util",
     "uni-stark",
+    "plonky3-pcs"
 ]
 
 [workspace.dependencies]
