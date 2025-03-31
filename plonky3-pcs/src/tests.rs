@@ -101,11 +101,15 @@ mod tests {
 
     #[test]
     fn test_inv_rate2() {
+        println!("Test: FRI invRate = 2");
+
         test_fri(1, 256);
     }
 
     #[test]
     fn test_inv_rate8() {
+        println!("Test: FRI invRate = 8");
+
         test_fri(3, 64);
     }
 }
