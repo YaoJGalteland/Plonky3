@@ -3,4 +3,3 @@ pub mod dfts;
 pub mod parsers;
 pub mod proofs;
 pub mod types;
-pub mod utilities;

@@ -37,7 +37,7 @@ const fn get_keccak_mmcs<F: Field>() -> KeccakMerkleMmcs<F> {
 /// The first permutation will be used for compression and the second for more sponge hashing.
 /// Currently this is only intended to be used with a pair of Poseidon2 hashes of with 16 and 24
 /// but this can easily be generalised in future if we desire.
-pub fn get_poseidon2_mmcs<
+const fn get_poseidon2_mmcs<
     F: Field,
     Perm16: CryptographicPermutation<[F; 16]> + CryptographicPermutation<[F::Packing; 16]>,
     Perm24: CryptographicPermutation<[F; 24]> + CryptographicPermutation<[F::Packing; 24]>,
@@ -69,8 +69,8 @@ pub fn prove_monty31_keccak<
     dft: DFT,
     num_hashes: usize,
 ) -> Result<(), impl Debug>
-    where
-        StandardUniform: Distribution<F>,
+where
+    StandardUniform: Distribution<F>,
 {
     let val_mmcs = get_keccak_mmcs();
 
@@ -113,8 +113,8 @@ pub fn prove_monty31_poseidon2<
     perm16: Perm16,
     perm24: Perm24,
 ) -> Result<(), impl Debug>
-    where
-        StandardUniform: Distribution<F>,
+where
+    StandardUniform: Distribution<F>,
 {
     let val_mmcs = get_poseidon2_mmcs::<F, _, _>(perm16, perm24.clone());
 
@@ -145,9 +145,9 @@ pub fn prove_monty31_poseidon2<
 #[inline]
 pub fn prove_m31_keccak<
     PG: ExampleHashAir<
-        Mersenne31,
-        KeccakCircleStarkConfig<Mersenne31, BinomialExtensionField<Mersenne31, 3>>,
-    >,
+            Mersenne31,
+            KeccakCircleStarkConfig<Mersenne31, BinomialExtensionField<Mersenne31, 3>>,
+        >,
 >(
     proof_goal: PG,
     num_hashes: usize,
@@ -193,8 +193,8 @@ pub fn prove_m31_poseidon2<
     perm16: Perm16,
     perm24: Perm24,
 ) -> Result<(), impl Debug>
-    where
-        StandardUniform: Distribution<F>,
+where
+    StandardUniform: Distribution<F>,
 {
     let val_mmcs = get_poseidon2_mmcs::<F, _, _>(perm16, perm24.clone());
 
@@ -234,8 +234,8 @@ pub fn report_result(result: Result<(), impl Debug>) {
 /// Panics if serialization fails.
 #[inline]
 pub fn report_proof_size<SC>(proof: &Proof<SC>)
-    where
-        SC: StarkGenericConfig,
+where
+    SC: StarkGenericConfig,
 {
     let config = bincode::config::standard()
         .with_little_endian()
