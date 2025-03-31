@@ -15,7 +15,7 @@ use rand_chacha::ChaCha8Rng;
 use p3_examples::utilities::{Proof, prove_without_air, report_proof_size_example};
 
 /// Constants defining the size of the trace matrix
-const LOG_TRACE_ROWS: usize = 19;
+const LOG_TRACE_ROWS: usize = 9;
 const LOG_TRACE_COLUMNS: usize = 11;
 
 /// Benchmark function for committing and opening a trace matrix using Polynomial Commitment Scheme (PCS)
