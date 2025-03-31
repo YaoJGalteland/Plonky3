@@ -58,7 +58,7 @@ fn bench_commit_open<SC>(
             "Commit",
             format!("log_blowup: {}, num_queries: {}", log_blowup, num_queries),
         ),
-        &(), // Pass input if needed, or use `&()` if no input
+        &(),
         |b, _| {
             b.iter(|| {
                 pcs.commit(vec![(trace_domain, trace.clone())]);
@@ -77,7 +77,7 @@ fn bench_commit_open<SC>(
             "Open",
             format!("log_blowup: {}, num_queries: {}", log_blowup, num_queries),
         ),
-        &(), // Pass input if needed, or use `&()` if no input
+        &(),
         |b, _| {
             b.iter(|| {
                 pcs.open(vec![(&trace_data, vec![vec![zeta, zeta_next]])], challenger);
@@ -112,7 +112,7 @@ fn bench_verify<SC>(
             "Verify",
             format!("log_blowup: {}, num_queries: {}", log_blowup, num_queries),
         ),
-        &(), // Pass input if needed, or use `&()` if no input
+        &(),
         |b, _| {
             b.iter(|| {
                 let _ = pcs.verify(
@@ -174,7 +174,6 @@ fn criterion_benchmark(c: &mut Criterion) {
 
         let pcs = TwoAdicFriPcs::new(dft.clone(), val_mmcs.clone(), fri_config);
 
-        // Set up the Stark configuration with the PCS
         let config = MyConfig::new(pcs);
 
         let mut proof_challenger = Challenger::new(perm24.clone());

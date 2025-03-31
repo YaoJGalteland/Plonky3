@@ -42,6 +42,7 @@ pub struct OpenedValues<Challenge> {
     pub trace_local: Vec<Challenge>,
     pub trace_next: Vec<Challenge>,
 }
+
 /// Report the size of the serialized proof.
 #[inline]
 pub fn report_proof_size_example<SC>(proof: &Proof<SC>)
