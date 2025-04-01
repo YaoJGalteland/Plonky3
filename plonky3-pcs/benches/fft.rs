@@ -10,7 +10,7 @@ use p3_util::pretty_name;
 use rand::distr::{Distribution, StandardUniform};
 use rand::rng;
 use p3_baby_bear::BabyBear;
-const LOG_N: usize = 20;
+const LOG_N: usize = 19;
 const LOG_W: usize = 11;
 
 fn bench_lde_baby_bear(c: &mut Criterion) {
