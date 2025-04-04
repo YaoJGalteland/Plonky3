@@ -11,7 +11,7 @@ use p3_matrix::dense::RowMajorMatrix;
 use p3_merkle_tree::MerkleTreeMmcs;
 use p3_mersenne_31::Mersenne31;
 use p3_symmetric::{CompressionFunctionFromHasher, SerializingHasher32};
-use plonky3_pcs::utilities::{CommitmentsWithoutQuotient, LOG_TRACE_COLUMNS, LOG_TRACE_ROWS, Proof, report_proof_size_example};
+use plonky3_pcs::utilities::{LOG_TRACE_COLUMNS, LOG_TRACE_ROWS};
 use rand::prelude::SmallRng;
 use rand::{Rng, SeedableRng};
 
@@ -90,27 +90,26 @@ fn criterion_benchmark(c: &mut Criterion) {
             vec![(trace_domain, trace.clone())],
         );
 
-        let commitments = CommitmentsWithoutQuotient {
-            trace: comm,
-        };
-
         let zeta: Challenge = rng.random();
 
         let mut chal = Challenger::from_hasher(vec![], byte_hash);
         let (opened_values, opening_proof) = pcs.open(vec![(&data, vec![vec![zeta]])], &mut chal);
 
         let config = bincode::config::standard()
-            .with_little_endian().with_fixed_int_encoding();
-
+            .with_little_endian()
+            .with_fixed_int_encoding();
 
         let comm_bytes =
             bincode::serde::encode_to_vec(comm.clone(), config).expect("Failed to serialize comm");
-        let opened_values_bytes =
-            bincode::serde::encode_to_vec(opened_values.clone(), config).expect("Failed to serialize opened_values");
-        let opening_proof_bytes =
-            bincode::serde::encode_to_vec(opening_proof.clone(), config).expect("Failed to serialize opening_proof");
+        let opened_values_bytes = bincode::serde::encode_to_vec(opened_values.clone(), config)
+            .expect("Failed to serialize opened_values");
+        let opening_proof_bytes = bincode::serde::encode_to_vec(opening_proof.clone(), config)
+            .expect("Failed to serialize opening_proof");
 
-        println!("Proof size: {} bytes", opening_proof_bytes.len()+comm_bytes.len()+opened_values_bytes.len());
+        println!(
+            "Proof size: {} bytes",
+            opening_proof_bytes.len() + comm_bytes.len() + opened_values_bytes.len()
+        );
 
         group.bench_with_input(
             BenchmarkId::new(

@@ -47,7 +47,7 @@ fn bench_commit_open<SC>(
     let pcs = config.pcs();
     let trace_domain = pcs.natural_domain_for_degree(trace.height());
 
-    let mut group = c.benchmark_group("PCS Benchmarks");
+    let mut group = c.benchmark_group("Fri PCS Benchmarks");
     group.sample_size(10); // Limit benchmark to 10 samples
 
     // Benchmark the commitment step
