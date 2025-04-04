@@ -101,7 +101,7 @@ fn bench_verify<SC>(
     let zeta: SC::Challenge = challenger.sample();
     let zeta_next = trace_domain.next_point(zeta).unwrap();
 
-    let mut group = c.benchmark_group("PCS Benchmarks");
+    let mut group = c.benchmark_group("Fri PCS Benchmarks");
     group.sample_size(10); // Limit benchmark to 10 samples
 
     // Benchmark the verify step

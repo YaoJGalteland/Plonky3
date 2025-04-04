@@ -67,7 +67,7 @@ fn criterion_benchmark(c: &mut Criterion) {
                 1 << LOG_TRACE_ROWS,
             );
 
-        let mut group = c.benchmark_group("PCS Benchmarks");
+        let mut group = c.benchmark_group("Circle PCS Benchmarks");
         group.sample_size(10); // Limit benchmark to 10 samples
 
         group.bench_with_input(
