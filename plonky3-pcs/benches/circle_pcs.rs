@@ -11,7 +11,7 @@ use p3_matrix::dense::RowMajorMatrix;
 use p3_merkle_tree::MerkleTreeMmcs;
 use p3_mersenne_31::Mersenne31;
 use p3_symmetric::{CompressionFunctionFromHasher, SerializingHasher32};
-use plonky3_pcs::utilities::{LOG_TRACE_COLUMNS, LOG_TRACE_ROWS};
+use plonky3_pcs::utilities::{LOG_TRACE_COLUMNS, LOG_TRACE_ROWS, report_proof_size_example};
 use rand::prelude::SmallRng;
 use rand::{Rng, SeedableRng};
 
@@ -94,6 +94,7 @@ fn criterion_benchmark(c: &mut Criterion) {
 
         let mut chal = Challenger::from_hasher(vec![], byte_hash);
         let (values, proof) = pcs.open(vec![(&data, vec![vec![zeta]])], &mut chal);
+        report_proof_size_example(&proof);
 
         group.bench_with_input(
             BenchmarkId::new(
