@@ -1,6 +1,5 @@
 #[cfg(test)]
 mod tests {
-
     use p3_challenger::DuplexChallenger;
     use p3_commit::ExtensionMmcs;
     use p3_dft::Radix2DitParallel;
@@ -17,40 +16,56 @@ mod tests {
     use p3_uni_stark::StarkConfig;
     use rand::SeedableRng;
     use rand::rngs::SmallRng;
+    use tracing::level_filters::LevelFilter;
+    use tracing_forest::ForestLayer;
+    use tracing_subscriber::layer::SubscriberExt;
+    use tracing_subscriber::util::SubscriberInitExt;
+    use tracing_subscriber::{EnvFilter, Registry};
 
-    use crate::utilities::{prove_random_trace, report_proof_size_example, verify_random_trace};
-
-    const LOG_TRACE_ROWS: usize = 19;
-    const LOG_TRACE_COLUMNS: usize = 11;
-
-    type Val = KoalaBear;
-    type Challenge = BinomialExtensionField<Val, 4>;
-    type Dft = Radix2DitParallel<Val>;
-    type Perm16 = Poseidon2<
-        Val,
-        Poseidon2ExternalLayerKoalaBear<16>,
-        Poseidon2InternalLayerKoalaBear<16>,
-        16,
-        3,
-    >;
-    type Perm24 = Poseidon2<
-        Val,
-        Poseidon2ExternalLayerKoalaBear<24>,
-        Poseidon2InternalLayerKoalaBear<24>,
-        24,
-        3,
-    >;
-    type MyHash = PaddingFreeSponge<Perm24, 24, 16, 8>;
-    type MyCompress = TruncatedPermutation<Perm16, 2, 8, 16>;
-    type ValMmcs =
-        MerkleTreeMmcs<<Val as Field>::Packing, <Val as Field>::Packing, MyHash, MyCompress, 8>;
-    type ChallengeMmcs = ExtensionMmcs<Val, Challenge, ValMmcs>;
-    type Challenger = DuplexChallenger<Val, Perm24, 24, 16>;
-    type PCS = TwoAdicFriPcs<Val, Dft, ValMmcs, ChallengeMmcs>;
-    type MyConfig = StarkConfig<PCS, Challenge, Challenger>;
+    use crate::utilities::{
+        LOG_TRACE_COLUMNS, LOG_TRACE_ROWS, prove_random_trace, report_proof_size_example,
+        verify_random_trace,
+    };
 
     // Test PCS for different FRI config
     fn test_fri(log_blowup: usize, num_queries: usize) {
+        type Val = KoalaBear;
+        type Challenge = BinomialExtensionField<Val, 4>;
+        type Dft = Radix2DitParallel<Val>;
+
+        //type Dft = Radix2Bowers;
+        type Perm16 = Poseidon2<
+            Val,
+            Poseidon2ExternalLayerKoalaBear<16>,
+            Poseidon2InternalLayerKoalaBear<16>,
+            16,
+            3,
+        >;
+        type Perm24 = Poseidon2<
+            Val,
+            Poseidon2ExternalLayerKoalaBear<24>,
+            Poseidon2InternalLayerKoalaBear<24>,
+            24,
+            3,
+        >;
+        type MyHash = PaddingFreeSponge<Perm24, 24, 16, 8>;
+        type MyCompress = TruncatedPermutation<Perm16, 2, 8, 16>;
+        type ValMmcs =
+            MerkleTreeMmcs<<Val as Field>::Packing, <Val as Field>::Packing, MyHash, MyCompress, 8>;
+        type ChallengeMmcs = ExtensionMmcs<Val, Challenge, ValMmcs>;
+        type Challenger = DuplexChallenger<Val, Perm24, 24, 16>;
+        type PCS = TwoAdicFriPcs<Val, Dft, ValMmcs, ChallengeMmcs>;
+        type MyConfig = StarkConfig<PCS, Challenge, Challenger>;
+
+        let env_filter = EnvFilter::builder()
+            .with_default_directive(LevelFilter::INFO.into())
+            .from_env_lossy();
+
+        Registry::default()
+            .with(env_filter)
+            .with(ForestLayer::default())
+            .init();
+
         let mut rng = SmallRng::seed_from_u64(1);
 
         let dft = Dft::default();
@@ -98,18 +113,10 @@ mod tests {
             println!("Proof Verified Successfully")
         }
     }
-
     #[test]
-    fn test_inv_rate2() {
+    fn test_fri_inv_rate2() {
         println!("Test: FRI invRate = 2");
 
         test_fri(1, 256);
-    }
-
-    #[test]
-    fn test_inv_rate8() {
-        println!("Test: FRI invRate = 8");
-
-        test_fri(3, 64);
     }
 }

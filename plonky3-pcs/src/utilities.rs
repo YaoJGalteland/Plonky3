@@ -7,6 +7,11 @@ use p3_matrix::dense::RowMajorMatrix;
 use p3_uni_stark::{PcsError, StarkGenericConfig, Val, VerificationError};
 use p3_util::log2_strict_usize;
 use serde::{Deserialize, Serialize};
+use tracing::info_span;
+
+/// Constants defining the size of the trace matrix
+pub const LOG_TRACE_ROWS: usize = 19;
+pub const LOG_TRACE_COLUMNS: usize = 11;
 
 /// Type alias for commitment representation within a Stark proof.
 type Com<SC> = <<SC as StarkGenericConfig>::Pcs as Pcs<
@@ -72,7 +77,9 @@ where
     let pcs = config.pcs();
     let trace_domain = pcs.natural_domain_for_degree(degree);
 
-    let (trace_commit, trace_data) = pcs.commit(vec![(trace_domain, trace)]);
+    //let (trace_commit, trace_data) = pcs.commit(vec![(trace_domain, trace)]);
+    let (trace_commit, trace_data) =
+        info_span!("commit to trace data").in_scope(|| pcs.commit(vec![(trace_domain, trace)]));
 
     let commitments = CommitmentsWithoutQuotient {
         trace: trace_commit,
@@ -81,8 +88,8 @@ where
     let zeta: SC::Challenge = challenger.sample();
     let zeta_next = trace_domain.next_point(zeta).unwrap();
 
-    let (opened_values, opening_proof) =
-        pcs.open(vec![(&trace_data, vec![vec![zeta, zeta_next]])], challenger);
+    let (opened_values, opening_proof) = info_span!("open")
+        .in_scope(|| pcs.open(vec![(&trace_data, vec![vec![zeta, zeta_next]])], challenger));
     let trace_local = opened_values[0][0][0].clone();
     let trace_next = opened_values[0][0][1].clone();
     let opened_values = OpenedValues {

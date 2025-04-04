@@ -12,13 +12,11 @@ use p3_merkle_tree::MerkleTreeMmcs;
 use p3_poseidon2::Poseidon2;
 use p3_symmetric::{PaddingFreeSponge, TruncatedPermutation};
 use p3_uni_stark::{StarkConfig, StarkGenericConfig, Val};
-use plonky3_pcs::utilities::{Proof, prove_random_trace, report_proof_size_example};
+use plonky3_pcs::utilities::{
+    LOG_TRACE_COLUMNS, LOG_TRACE_ROWS, Proof, prove_random_trace, report_proof_size_example,
+};
 use rand::SeedableRng;
 use rand::prelude::SmallRng;
-
-/// Constants defining the size of the trace matrix
-const LOG_TRACE_ROWS: usize = 19;
-const LOG_TRACE_COLUMNS: usize = 11;
 
 type F = KoalaBear;
 type Challenge = BinomialExtensionField<F, 4>;
