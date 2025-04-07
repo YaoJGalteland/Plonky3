@@ -38,7 +38,7 @@ fn lde_cfft<M: Measurement>(g: &mut BenchmarkGroup<M>, log_n: usize, log_w: usiz
                 |m| {
                     let evals =
                         CircleEvaluations::from_natural_order(CircleDomain::standard(log_n), m);
-                    evals.extrapolate(CircleDomain::standard(log_n + 1))
+                    evals.extrapolate(CircleDomain::standard(log_n + 1)) // extension rate = 2, add 1 bit
                 },
                 criterion::BatchSize::LargeInput,
             )
@@ -64,7 +64,7 @@ fn lde_twoadic<F: TwoAdicField, Dft: TwoAdicSubgroupDft<F>, M: Measurement>(
         |b, (dft, m)| {
             b.iter_batched(
                 || (dft.clone(), m.clone()),
-                |(dft, m)| dft.coset_lde_batch(m, 1, F::GENERATOR),
+                |(dft, m)| dft.coset_lde_batch(m, 1, F::GENERATOR), // extension rate = 2, add 1 bit
                 criterion::BatchSize::LargeInput,
             )
         },
