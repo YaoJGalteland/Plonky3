@@ -13,6 +13,9 @@ p3-fri.workspace = true
 p3-matrix.workspace = true
 p3-maybe-rayon.workspace = true
 p3-util.workspace = true
+p3-monty-31.workspace = true
+p3-baby-bear.workspace = true
+p3-koala-bear.workspace = true
 
 tracing.workspace = true
 itertools.workspace = true
@@ -39,5 +42,10 @@ name = "cfft"
 harness = false
 
 [features]
-nightly-features = []
-parallel = []
+parallel = ["p3-maybe-rayon/parallel"]
+nightly-features = [
+    "p3-monty-31/nightly-features",
+    "p3-baby-bear/nightly-features",
+    "p3-koala-bear/nightly-features",
+    "p3-mersenne-31/nightly-features",
+]
