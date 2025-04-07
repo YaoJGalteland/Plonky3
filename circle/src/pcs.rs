@@ -131,7 +131,10 @@ where
                     .to_cfft_order()
             })
             .collect_vec();
-        let (comm, mmcs_data) = self.mmcs.commit(ldes);
+        let (comm, mmcs_data) =  info_span!("mmcs").in_scope(|| {
+            self.mmcs.commit(ldes)
+            });
+
         (comm, mmcs_data)
     }
 
