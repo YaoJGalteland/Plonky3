@@ -116,7 +116,6 @@ mod tests {
     #[test]
     fn test_fri_inv_rate2() {
         println!("Test: FRI invRate = 2");
-
         test_fri(1, 256);
     }
 }

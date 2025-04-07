@@ -15,6 +15,11 @@ extern crate alloc;
     target_arch = "x86_64",
     target_feature = "avx512f"
 ))]
-mod tests_circle;
-//mod tests_fri;
+//mod tests_circle;
+#[cfg(all(
+    feature = "nightly-features",
+    target_arch = "x86_64",
+    target_feature = "avx512f"
+))]
+mod tests_fri;
 pub mod utilities;
