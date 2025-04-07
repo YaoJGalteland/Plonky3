@@ -13,4 +13,4 @@ extern crate alloc;
 
 mod tests_circle;
 //mod tests_fri;
-mod utilities;
+pub mod utilities;
