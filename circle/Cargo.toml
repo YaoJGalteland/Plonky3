@@ -41,6 +41,3 @@ tracing-forest = { workspace = true, features = ["ansi", "smallvec"] }
 name = "cfft"
 harness = false
 
-[features]
-parallel = ["p3-maybe-rayon/parallel"]
-nightly-features = []
