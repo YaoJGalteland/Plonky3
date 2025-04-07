@@ -1,4 +1,5 @@
-use std::fmt::Debug;
+use alloc::vec;
+use alloc::vec::Vec;
 
 use p3_challenger::CanSample;
 use p3_commit::{Pcs, PolynomialSpace};
@@ -57,9 +58,9 @@ where
     let config = bincode::config::standard()
         .with_little_endian()
         .with_fixed_int_encoding();
-    let proof_bytes =
+    let _proof_bytes =
         bincode::serde::encode_to_vec(proof, config).expect("Failed to serialize proof");
-    println!("Proof size: {} bytes", proof_bytes.len());
+
 }
 
 /// Generates a STARK proof for a random trace.

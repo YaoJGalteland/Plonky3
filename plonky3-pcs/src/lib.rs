@@ -8,6 +8,8 @@
     feature(stdarch_x86_avx512)
 )]
 
+extern crate alloc;
+
 #[cfg(all(
     feature = "nightly-features",
     target_arch = "x86_64",
