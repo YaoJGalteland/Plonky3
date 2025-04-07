@@ -8,6 +8,7 @@ use p3_mersenne_31::Mersenne31;
 use p3_util::pretty_name;
 use rand::distr::{Distribution, StandardUniform};
 use rand::rng;
+use p3_baby_bear::BabyBear;
 use p3_koala_bear::KoalaBear;
 
 fn bench_lde(c: &mut Criterion) {
@@ -17,6 +18,9 @@ fn bench_lde(c: &mut Criterion) {
     let mut g = c.benchmark_group("lde");
     g.sample_size(10);
     lde_cfft(&mut g, log_n, log_w);
+    lde_twoadic::<BabyBear, Radix2Dit<_>, _>(&mut g, log_n, log_w);
+    lde_twoadic::<BabyBear, Radix2DitParallel<_>, _>(&mut g, log_n, log_w);
+    lde_twoadic::<BabyBear, Radix2Bowers, _>(&mut g, log_n, log_w);
     lde_twoadic::<KoalaBear, Radix2Dit<_>, _>(&mut g, log_n, log_w);
     lde_twoadic::<KoalaBear, Radix2DitParallel<_>, _>(&mut g, log_n, log_w);
     lde_twoadic::<KoalaBear, Radix2Bowers, _>(&mut g, log_n, log_w);
