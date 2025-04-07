@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod tests {
-    use std::marker::PhantomData;
+    use alloc::vec;
+    use core::marker::PhantomData;
 
     use p3_challenger::{HashChallenger, SerializingChallenger32};
     use p3_circle::CirclePcs;
@@ -76,11 +77,6 @@ mod tests {
             );
 
         let trace = RowMajorMatrix::rand(&mut rng, 1 << LOG_TRACE_ROWS, 1 << LOG_TRACE_COLUMNS);
-        println!(
-            "trace dimension: rows={:?}, columns={:?}",
-            trace.values.len() / trace.width,
-            trace.width
-        );
 
         let (comm, data) = info_span!("commit to trace data").in_scope(|| {
             <Pcs as p3_commit::Pcs<Challenge, Challenger>>::commit(
@@ -114,7 +110,6 @@ mod tests {
 
     #[test]
     fn test_circle_pcs_inv_rate2() {
-        println!("Test: CirclePcs invRate = 2");
         circle_pcs(1, 256);
     }
 }
