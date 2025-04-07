@@ -541,11 +541,25 @@ mod tests {
     use p3_symmetric::{CompressionFunctionFromHasher, SerializingHasher32};
     use rand::{Rng, SeedableRng};
     use rand_chacha::ChaCha8Rng;
+    use tracing::level_filters::LevelFilter;
+    use tracing_forest::ForestLayer;
+    use tracing_subscriber::{EnvFilter, Registry};
+    use tracing_subscriber::layer::SubscriberExt;
+    use tracing_subscriber::util::SubscriberInitExt;
 
     use super::*;
 
     #[test]
     fn circle_pcs() {
+        let env_filter = EnvFilter::builder()
+            .with_default_directive(LevelFilter::INFO.into())
+            .from_env_lossy();
+
+        Registry::default()
+            .with(env_filter)
+            .with(ForestLayer::default())
+            .init();
+
         // Very simple pcs test. More rigorous tests in p3_fri/tests/pcs.
 
         let mut rng = ChaCha8Rng::from_seed([0; 32]);
@@ -578,17 +592,17 @@ mod tests {
             _phantom: PhantomData,
         };
 
-        let log_n = 10;
+        let log_n = 19;
 
         let d = <Pcs as p3_commit::Pcs<Challenge, Challenger>>::natural_domain_for_degree(
             &pcs,
             1 << log_n,
         );
 
-        let evals = RowMajorMatrix::rand(&mut rng, 1 << log_n, 1);
+        let evals = RowMajorMatrix::rand(&mut rng, 1 << log_n, 1<<11);
 
-        let (comm, data) =
-            <Pcs as p3_commit::Pcs<Challenge, Challenger>>::commit(&pcs, vec![(d, evals)]);
+        let (comm, data) =info_span!("commit to trace data").in_scope(|| {
+            <Pcs as p3_commit::Pcs<Challenge, Challenger>>::commit(&pcs, vec![(d, evals)])});
 
         let zeta: Challenge = rng.random();
 
