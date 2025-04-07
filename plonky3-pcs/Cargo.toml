@@ -35,10 +35,6 @@ criterion = "0.5.1"
 tracing.workspace = true
 
 [[bench]]
-name = "fri_pcs"
-harness = false
-
-[[bench]]
 name = "circle_pcs"
 harness = false
 
