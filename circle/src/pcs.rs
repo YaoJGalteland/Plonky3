@@ -535,14 +535,12 @@ mod tests {
     use p3_challenger::{HashChallenger, SerializingChallenger32};
     use p3_commit::{ExtensionMmcs, Pcs};
     use p3_field::extension::BinomialExtensionField;
-    use p3_fri::create_test_fri_config;
     use p3_keccak::Keccak256Hash;
     use p3_merkle_tree::MerkleTreeMmcs;
     use p3_mersenne_31::Mersenne31;
     use p3_symmetric::{CompressionFunctionFromHasher, SerializingHasher32};
     use rand::prelude::SmallRng;
     use rand::{Rng, SeedableRng};
-    use rand_chacha::ChaCha8Rng;
     use tracing::level_filters::LevelFilter;
     use tracing_forest::ForestLayer;
     use tracing_subscriber::layer::SubscriberExt;
