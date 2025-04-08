@@ -131,9 +131,7 @@ where
                     .to_cfft_order()
             })
             .collect_vec();
-        let (comm, mmcs_data) =  info_span!("mmcs").in_scope(|| {
-            self.mmcs.commit(ldes)
-            });
+        let (comm, mmcs_data) = info_span!("mmcs").in_scope(|| self.mmcs.commit(ldes));
 
         (comm, mmcs_data)
     }
@@ -537,19 +535,17 @@ mod tests {
     use p3_challenger::{HashChallenger, SerializingChallenger32};
     use p3_commit::{ExtensionMmcs, Pcs};
     use p3_field::extension::BinomialExtensionField;
-    use p3_fri::create_test_fri_config;
     use p3_keccak::Keccak256Hash;
     use p3_merkle_tree::MerkleTreeMmcs;
     use p3_mersenne_31::Mersenne31;
     use p3_symmetric::{CompressionFunctionFromHasher, SerializingHasher32};
-    use rand::{Rng, SeedableRng};
     use rand::prelude::SmallRng;
-    use rand_chacha::ChaCha8Rng;
+    use rand::{Rng, SeedableRng};
     use tracing::level_filters::LevelFilter;
     use tracing_forest::ForestLayer;
-    use tracing_subscriber::{EnvFilter, Registry};
     use tracing_subscriber::layer::SubscriberExt;
     use tracing_subscriber::util::SubscriberInitExt;
+    use tracing_subscriber::{EnvFilter, Registry};
 
     use super::*;
 
@@ -588,9 +584,9 @@ mod tests {
         type Challenger = SerializingChallenger32<Val, HashChallenger<u8, ByteHash, 32>>;
 
         let fri_config = FriConfig {
-            log_blowup:1,
+            log_blowup: 1,
             log_final_poly_len: 0,
-            num_queries:256,
+            num_queries: 256,
             proof_of_work_bits: 0,
             mmcs: challenge_mmcs,
         };
@@ -608,10 +604,11 @@ mod tests {
             1 << log_n,
         );
 
-        let evals = RowMajorMatrix::rand(&mut rng, 1 << log_n, 1<<11);
+        let evals = RowMajorMatrix::rand(&mut rng, 1 << log_n, 1 << 11);
 
-        let (comm, data) =info_span!("commit to trace data").in_scope(|| {
-            <Pcs as p3_commit::Pcs<Challenge, Challenger>>::commit(&pcs, vec![(d, evals)])});
+        let (comm, data) = info_span!("commit to trace data").in_scope(|| {
+            <Pcs as p3_commit::Pcs<Challenge, Challenger>>::commit(&pcs, vec![(d, evals)])
+        });
 
         let zeta: Challenge = rng.random();
 

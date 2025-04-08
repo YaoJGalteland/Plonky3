@@ -1,19 +1,19 @@
 use criterion::measurement::Measurement;
 use criterion::{BenchmarkGroup, BenchmarkId, Criterion, criterion_group, criterion_main};
+use p3_baby_bear::BabyBear;
 use p3_circle::{CircleDomain, CircleEvaluations};
 use p3_dft::{Radix2Bowers, Radix2Dit, Radix2DitParallel, TwoAdicSubgroupDft};
 use p3_field::TwoAdicField;
+use p3_koala_bear::KoalaBear;
 use p3_matrix::dense::RowMajorMatrix;
 use p3_mersenne_31::Mersenne31;
 use p3_util::pretty_name;
 use rand::distr::{Distribution, StandardUniform};
 use rand::rng;
-use p3_baby_bear::BabyBear;
-use p3_koala_bear::KoalaBear;
 
 fn bench_lde(c: &mut Criterion) {
-    let log_n = 19;
-    let log_w = 11;
+    let log_n = 18;
+    let log_w = 0;
 
     let mut g = c.benchmark_group("lde");
     g.sample_size(10);
@@ -38,7 +38,7 @@ fn lde_cfft<M: Measurement>(g: &mut BenchmarkGroup<M>, log_n: usize, log_w: usiz
                 |m| {
                     let evals =
                         CircleEvaluations::from_natural_order(CircleDomain::standard(log_n), m);
-                    evals.extrapolate(CircleDomain::standard(log_n + 1))
+                    evals.extrapolate(CircleDomain::standard(log_n + 1)) // extension rate = 2, add 1 bit
                 },
                 criterion::BatchSize::LargeInput,
             )
@@ -64,7 +64,7 @@ fn lde_twoadic<F: TwoAdicField, Dft: TwoAdicSubgroupDft<F>, M: Measurement>(
         |b, (dft, m)| {
             b.iter_batched(
                 || (dft.clone(), m.clone()),
-                |(dft, m)| dft.coset_lde_batch(m, 1, F::GENERATOR),
+                |(dft, m)| dft.coset_lde_batch(m, 1, F::GENERATOR), // extension rate = 2, add 1 bit
                 criterion::BatchSize::LargeInput,
             )
         },
@@ -72,9 +72,4 @@ fn lde_twoadic<F: TwoAdicField, Dft: TwoAdicSubgroupDft<F>, M: Measurement>(
 }
 
 criterion_group!(benches, bench_lde);
-#[cfg(all(
-    feature = "nightly-features",
-    target_arch = "x86_64",
-    target_feature = "avx512f"
-))]
 criterion_main!(benches);
