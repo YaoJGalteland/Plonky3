@@ -1,4 +1,3 @@
-#![no_std]
 #![cfg_attr(
     all(
         feature = "nightly-features",
@@ -16,5 +15,11 @@ extern crate alloc;
     target_feature = "avx512f"
 ))]
 mod tests_circle;
-//mod tests_fri;
+
+#[cfg(all(
+    feature = "nightly-features",
+    target_arch = "x86_64",
+    target_feature = "avx512f"
+))]
+mod tests_fri;
 pub mod utilities;
