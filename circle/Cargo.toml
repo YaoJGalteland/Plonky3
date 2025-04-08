@@ -43,3 +43,6 @@ harness = false
 
 [features]
 parallel = ["p3-maybe-rayon/parallel"]
+
+benches_diff_flags = []
+benches_large_trace = []
