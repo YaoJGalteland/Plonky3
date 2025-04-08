@@ -13,7 +13,7 @@ use p3_koala_bear::KoalaBear;
 
 fn bench_lde(c: &mut Criterion) {
     let log_n = 18;
-    let log_w = 1;
+    let log_w = 0;
 
     let mut g = c.benchmark_group("lde");
     g.sample_size(10);
