@@ -41,7 +41,13 @@ RUSTFLAGS="-Ctarget-feature=+avx512f" cargo +nightly bench --features "nightly-f
 ```
 
 ## Running the Tests
-Additionally, PCS tests are implemented:
+Additionally, PCS tests are implemented.
+
+Test Fri PCS:
 ```bash
-RUSTFLAGS="-Ctarget-feature=+avx512f" cargo +nightly test --release --features "nightly-features"  --features parallel
+RUSTFLAGS="-Ctarget-feature=+avx512f" cargo +nightly test tests_fri --release --features "nightly-features"  --features parallel
+```
+Test Circle PCS:
+```bash
+RUSTFLAGS="-Ctarget-feature=+avx512f" cargo +nightly test tests_circle --release --features "nightly-features"  --features parallel
 ```
