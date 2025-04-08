@@ -38,6 +38,10 @@ tracing.workspace = true
 name = "circle_pcs"
 harness = false
 
+[[bench]]
+name = "fri_pcs"
+harness = false
+
 [dev-dependencies]
 p3-baby-bear.workspace = true
 p3-blake3.workspace = true

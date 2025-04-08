@@ -60,7 +60,6 @@ where
         .with_fixed_int_encoding();
     let _proof_bytes =
         bincode::serde::encode_to_vec(proof, config).expect("Failed to serialize proof");
-
 }
 
 /// Generates a STARK proof for a random trace.
