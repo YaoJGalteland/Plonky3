@@ -13,6 +13,9 @@ p3-fri.workspace = true
 p3-matrix.workspace = true
 p3-maybe-rayon.workspace = true
 p3-util.workspace = true
+p3-monty-31.workspace = true
+p3-baby-bear.workspace = true
+p3-koala-bear.workspace = true
 
 tracing.workspace = true
 itertools.workspace = true
@@ -37,3 +40,7 @@ tracing-forest = { workspace = true, features = ["ansi", "smallvec"] }
 [[bench]]
 name = "cfft"
 harness = false
+
+[features]
+parallel = ["p3-maybe-rayon/parallel"]
+nightly-features = []

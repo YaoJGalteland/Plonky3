@@ -35,7 +35,7 @@ criterion = "0.5.1"
 tracing.workspace = true
 
 [[bench]]
-name = "bench"
+name = "circle_pcs"
 harness = false
 
 [dev-dependencies]
