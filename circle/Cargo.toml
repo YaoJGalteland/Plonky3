@@ -43,6 +43,11 @@ harness = false
 
 [features]
 parallel = ["p3-maybe-rayon/parallel"]
-nightly-features = []
+nightly-features = [
+    "p3-monty-31/nightly-features",
+    "p3-baby-bear/nightly-features",
+    "p3-koala-bear/nightly-features",
+    "p3-mersenne-31/nightly-features",
+]
 benches_diff_flags = []
 benches_large_trace = []
