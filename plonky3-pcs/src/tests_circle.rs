@@ -59,7 +59,7 @@ mod tests {
             log_blowup,
             log_final_poly_len: 0,
             num_queries,
-            proof_of_work_bits: 0,
+            proof_of_work_bits: 16,
             mmcs: challenge_mmcs,
         };
 
