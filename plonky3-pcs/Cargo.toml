@@ -37,7 +37,12 @@ tracing.workspace = true
 [[bench]]
 name = "cfft"
 harness = false
-
+[[bench]]
+name = "circle_pcs"
+harness = false
+[[bench]]
+name = "fri_pcs"
+harness = false
 
 
 [dev-dependencies]
@@ -65,3 +70,8 @@ nightly-features = [
     "p3-koala-bear/nightly-features",
     "p3-mersenne-31/nightly-features",
 ]
+
+benches_diff_flags = []
+benches_large_trace = []
+benches_fri = []
+benches_circle = []

@@ -148,10 +148,14 @@ fn criterion_benchmark(c: &mut Criterion) {
 }
 
 criterion_group!(benches, criterion_benchmark);
-
+/*
 #[cfg(all(
     feature = "nightly-features",
     target_arch = "x86_64",
     target_feature = "avx512f"
 ))]
+
+
+ */
+//#[cfg(feature = "benches_circle")]
 criterion_main!(benches);
