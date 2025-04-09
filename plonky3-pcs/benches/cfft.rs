@@ -86,6 +86,7 @@ fn lde_twoadic<F: TwoAdicField, Dft: TwoAdicSubgroupDft<F>, M: Measurement>(
     );
 }
 criterion_group!(benches_diff_flags, bench_lde_diff_flags);
+criterion_group!(benches_large_trace, bench_lde_large_trace);
 
 // Conditionally compile the main function based on the enabled feature
-criterion_main!(benches_diff_flags);
+criterion_main!(benches_diff_flags, benches_large_trace);
