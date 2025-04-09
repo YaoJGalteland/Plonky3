@@ -15,7 +15,7 @@ use rand::rng;
 fn bench_lde_diff_flags(c: &mut Criterion) {
 
     for log_n in 18..22 {
-        for log_w in 5..10 {
+        for log_w in 1..10 {
             let mut g = c.benchmark_group(format!("lde for different flags: log_n={},log_w={}", log_n,log_w));
             g.sample_size(10);
             lde_cfft(&mut g, log_n, log_w);
