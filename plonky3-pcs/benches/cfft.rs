@@ -1,3 +1,4 @@
+
 use criterion::measurement::Measurement;
 use criterion::{BenchmarkGroup, BenchmarkId, Criterion, criterion_group, criterion_main};
 use p3_baby_bear::BabyBear;
@@ -12,33 +13,17 @@ use rand::distr::{Distribution, StandardUniform};
 use rand::rng;
 
 fn bench_lde_diff_flags(c: &mut Criterion) {
-    let log_n = 18;
     let log_w = 0;
 
-    let mut g = c.benchmark_group("lde for different flags");
-    g.sample_size(10);
-    lde_cfft(&mut g, log_n, log_w);
-    lde_twoadic::<BabyBear, Radix2Dit<_>, _>(&mut g, log_n, log_w);
-    lde_twoadic::<BabyBear, Radix2DitParallel<_>, _>(&mut g, log_n, log_w);
-    lde_twoadic::<BabyBear, Radix2Bowers, _>(&mut g, log_n, log_w);
-    lde_twoadic::<KoalaBear, Radix2Dit<_>, _>(&mut g, log_n, log_w);
-    lde_twoadic::<KoalaBear, Radix2DitParallel<_>, _>(&mut g, log_n, log_w);
-    lde_twoadic::<KoalaBear, Radix2Bowers, _>(&mut g, log_n, log_w);
-}
+    for log_n in 18..30 {
+        let mut g = c.benchmark_group(format!("lde for different flags: log_n={}", log_n));
+        g.sample_size(10);
+        lde_cfft(&mut g, log_n, log_w);
+        lde_twoadic::<KoalaBear, Radix2Dit<_>, _>(&mut g, log_n, log_w);
+        lde_twoadic::<KoalaBear, Radix2DitParallel<_>, _>(&mut g, log_n, log_w);
+        lde_twoadic::<KoalaBear, Radix2Bowers, _>(&mut g, log_n, log_w);
+    }
 
-fn bench_lde_large_trace(c: &mut Criterion) {
-    let log_n = 19;
-    let log_w = 11;
-
-    let mut g = c.benchmark_group("lde for a large trace");
-    g.sample_size(10);
-    lde_cfft(&mut g, log_n, log_w);
-    lde_twoadic::<BabyBear, Radix2Dit<_>, _>(&mut g, log_n, log_w);
-    lde_twoadic::<BabyBear, Radix2DitParallel<_>, _>(&mut g, log_n, log_w);
-    lde_twoadic::<BabyBear, Radix2Bowers, _>(&mut g, log_n, log_w);
-    lde_twoadic::<KoalaBear, Radix2Dit<_>, _>(&mut g, log_n, log_w);
-    lde_twoadic::<KoalaBear, Radix2DitParallel<_>, _>(&mut g, log_n, log_w);
-    lde_twoadic::<KoalaBear, Radix2Bowers, _>(&mut g, log_n, log_w);
 }
 
 fn lde_cfft<M: Measurement>(g: &mut BenchmarkGroup<M>, log_n: usize, log_w: usize) {
@@ -86,7 +71,13 @@ fn lde_twoadic<F: TwoAdicField, Dft: TwoAdicSubgroupDft<F>, M: Measurement>(
     );
 }
 criterion_group!(benches_diff_flags, bench_lde_diff_flags);
-criterion_group!(benches_large_trace, bench_lde_large_trace);
+//criterion_group!(benches_large_trace, bench_lde_large_trace);
 
 // Conditionally compile the main function based on the enabled feature
-criterion_main!(benches_diff_flags, benches_large_trace);
+
+
+// Conditionally compile the main function based on the enabled feature
+//#[cfg(feature = "benches_diff_flags")]
+criterion_main!(benches_diff_flags);
+
+//criterion_main!(benches_large_trace);
