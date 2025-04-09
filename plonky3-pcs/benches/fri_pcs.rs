@@ -158,7 +158,7 @@ fn criterion_benchmark(c: &mut Criterion) {
 
     let fri_test_cases = [
         (1, 256), // log_blowup: 1, num_queries: 256
-        (3, 64),  // log_blowup: 3, num_queries: 64
+                  //  (3, 64),  // log_blowup: 3, num_queries: 64
     ];
 
     for &(log_blowup, num_queries) in &fri_test_cases {
