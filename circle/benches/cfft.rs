@@ -92,18 +92,11 @@ criterion_group!(benches_diff_flags, bench_lde_diff_flags);
 criterion_group!(benches_large_trace, bench_lde_large_trace);
 
 // Conditionally compile the main function based on the enabled feature
-#[cfg(feature = "benches_diff_flags")]
 #[cfg(all(
     feature = "nightly-features",
     target_arch = "x86_64",
     target_feature = "avx512f"
 ))]
+#[cfg(feature = "benches_diff_flags")]
 criterion_main!(benches_diff_flags);
 
-#[cfg(feature = "benches_large_trace")]
-#[cfg(all(
-    feature = "nightly-features",
-    target_arch = "x86_64",
-    target_feature = "avx512f"
-))]
-criterion_main!(benches_large_trace);
