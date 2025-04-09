@@ -89,9 +89,4 @@ criterion_group!(benches_diff_flags, bench_lde_diff_flags);
 
 // Conditionally compile the main function based on the enabled feature
 
-#[cfg(all(
-    feature = "nightly-features",
-    target_arch = "x86_64",
-    target_feature = "avx512f"
-))]
 criterion_main!(benches_diff_flags);
