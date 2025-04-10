@@ -15,7 +15,8 @@ The trace used in the benchmark has a dimension of 19 bits for rows and 11 bits 
 Run:
 ```bash
 cd Plonky3/plonky3-pcs 
-RUSTFLAGS="-Ctarget-feature=+avx512f" cargo +nightly bench --features "nightly-features"  --features parallel
+rustup default nightly
+RUSTFLAGS="-C target-cpu=native -C opt-level=3 -C target-feature=+avx512f" cargo +nightly bench --features "nightly-features" --features parallel
 ```
 
 ## Running the Tests
@@ -23,5 +24,5 @@ Additionally, PCS tests are implemented.
 
 Test Fri PCS:
 ```bash
-RUSTFLAGS="-Ctarget-feature=+avx512f" cargo +nightly test tests_fri --release --features "nightly-features"  --features parallel
+RUSTFLAGS="-C target-cpu=native -C opt-level=3 -C target-feature=+avx512f" cargo +nightly test --release --features "nightly-features"  --features parallel
 ```
