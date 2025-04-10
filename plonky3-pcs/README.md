@@ -1,17 +1,11 @@
 # Benchmarking Polynomial Commitment Schemes
-This repository benchmarks Polynomial Commitment Schemes (PCS). The benchmarking suite evaluates:
+This repository benchmarks Fri PCS. The benchmarking suite evaluates:
 - Commit Phase
 - Open Phase
-- Verification Phase
-
-The benchmarks are executed with different `log_blowup` and `num_queries` configurations:
-- `{log_blowup: 1, num_queries: 256}`
-- `{log_blowup: 3, num_queries: 64}`
 
 The trace used in the benchmark has a dimension of 19 bits for rows and 11 bits for columns, approximating 4GB of data.
 
-
-## Benchmarking PCS
+## Running the Benchmark
 Run:
 ```bash
 cd Plonky3/plonky3-pcs 
