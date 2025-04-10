@@ -16,14 +16,14 @@ fn bench_lde_diff_flags(c: &mut Criterion) {
 
     println!("Number of Rayon threads: {}", rayon::current_num_threads());
 
-    for log_n in 18..20 {
-        for log_w in 1..6 {
+    for log_n in 18..19 {
+        for log_w in 8..9 {
             let mut g = c.benchmark_group(format!("lde for different flags: log_n={},log_w={}", log_n,log_w));
             g.sample_size(10);
             lde_cfft(&mut g, log_n, log_w);
             lde_twoadic::<KoalaBear, Radix2Dit<_>, _>(&mut g, log_n, log_w);
             lde_twoadic::<KoalaBear, Radix2DitParallel<_>, _>(&mut g, log_n, log_w);
-            //lde_twoadic::<KoalaBear, Radix2Bowers, _>(&mut g, log_n, log_w);
+            lde_twoadic::<KoalaBear, Radix2Bowers, _>(&mut g, log_n, log_w);
         }
     }
 }
