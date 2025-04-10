@@ -84,54 +84,6 @@ fn bench_commit_open<SC>(
     );
 }
 
-/// This function benchmarks the verification step for the provided proof.
-fn bench_verify<SC>(
-    config: &SC,
-    challenger: &mut SC::Challenger,
-    proof: &Proof<SC>,
-    log_blowup: usize,
-    num_queries: usize,
-    c: &mut Criterion,
-) where
-    SC: StarkGenericConfig,
-{
-    let pcs = config.pcs();
-    let trace_domain = pcs.natural_domain_for_degree(1 << proof.degree_bits);
-
-    let zeta: SC::Challenge = challenger.sample();
-    let zeta_next = trace_domain.next_point(zeta).unwrap();
-
-    let mut group = c.benchmark_group("Fri PCS Benchmarks");
-    group.sample_size(10); // Limit benchmark to 10 samples
-
-    // Benchmark the verify step
-    group.bench_with_input(
-        BenchmarkId::new(
-            "Verify",
-            format!("log_blowup: {}, num_queries: {}", log_blowup, num_queries),
-        ),
-        &(),
-        |b, _| {
-            b.iter(|| {
-                let _ = pcs.verify(
-                    vec![(
-                        proof.commitments.trace.clone(),
-                        vec![(
-                            trace_domain,
-                            vec![
-                                (zeta, proof.opened_values.trace_local.clone()),
-                                (zeta_next, proof.opened_values.trace_next.clone()),
-                            ],
-                        )],
-                    )],
-                    &proof.opening_proof,
-                    challenger,
-                );
-            })
-        },
-    );
-}
-
 /// Main benchmark function setting up cryptographic configurations and executing benchmarks
 fn criterion_benchmark(c: &mut Criterion) {
     let mut rng = SmallRng::seed_from_u64(1);
@@ -190,15 +142,6 @@ fn criterion_benchmark(c: &mut Criterion) {
         let proof = prove_random_trace(&config, &mut proof_challenger, trace.clone());
         report_proof_size_example(&proof);
 
-        // Run the verification benchmark
-        bench_verify(
-            &config,
-            &mut verif_challenger,
-            &proof,
-            log_blowup,
-            num_queries,
-            c,
-        )
     }
 }
 

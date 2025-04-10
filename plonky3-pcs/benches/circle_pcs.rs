@@ -123,27 +123,6 @@ fn criterion_benchmark(c: &mut Criterion) {
                 })
             },
         );
-        let mut chal = Challenger::from_hasher(vec![], byte_hash);
-
-        group.bench_with_input(
-            BenchmarkId::new(
-                "Verify",
-                format!("log_blowup: {}, num_queries: {}", log_blowup, num_queries),
-            ),
-            &(),
-            |b, _| {
-                b.iter(|| {
-                    let _ = pcs.verify(
-                        vec![(
-                            comm,
-                            vec![(trace_domain, vec![(zeta, opened_values[0][0][0].clone())])],
-                        )],
-                        &opening_proof,
-                        &mut chal,
-                    );
-                })
-            },
-        );
     }
 }
 
