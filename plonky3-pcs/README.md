@@ -10,28 +10,6 @@ The benchmarks are executed with different `log_blowup` and `num_queries` config
 
 The trace used in the benchmark has a dimension of 19 bits for rows and 11 bits for columns, approximating 4GB of data.
 
-## Benchmarking FFT with Different Feature Flags
-Run:
-```bash
-cd Plonky3/circle 
-
-# Single-thread, no AVX512
-cargo bench --features benches_diff_flags  
-
-# Enable AVX-512 only
-RUSTFLAGS="-Ctarget-feature=+avx512f" cargo bench --features benches_diff_flags  
-
-# AVX-512 with parallel feature
-RUSTFLAGS="-Ctarget-feature=+avx512f" cargo bench --features parallel --features benches_diff_flags  
-
-```
-
-## Benchmarking FFT for a Practical Large Trace 
-Run:
-```bash
-cd Plonky3/circle
-RUSTFLAGS="-Ctarget-feature=+avx512f" cargo +nightly bench --features "nightly-features"  --features parallel --features benches_large_trace
-```
 
 ## Benchmarking PCS
 Run:
@@ -46,8 +24,4 @@ Additionally, PCS tests are implemented.
 Test Fri PCS:
 ```bash
 RUSTFLAGS="-Ctarget-feature=+avx512f" cargo +nightly test tests_fri --release --features "nightly-features"  --features parallel
-```
-Test Circle PCS:
-```bash
-RUSTFLAGS="-Ctarget-feature=+avx512f" cargo +nightly test tests_circle --release --features "nightly-features"  --features parallel
 ```

@@ -9,7 +9,6 @@ p3-air.workspace = true
 p3-blake3-air.workspace = true
 p3-field.workspace = true
 p3-challenger.workspace = true
-p3-circle.workspace = true
 p3-commit.workspace = true
 p3-dft.workspace = true
 p3-fri.workspace = true
@@ -34,9 +33,6 @@ rand_chacha = "0.9.0"
 criterion = "0.5.1"
 tracing.workspace = true
 
-[[bench]]
-name = "circle_pcs"
-harness = false
 
 [[bench]]
 name = "fri_pcs"

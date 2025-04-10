@@ -33,7 +33,6 @@ mod tests {
         type Challenge = BinomialExtensionField<Val, 4>;
         type Dft = Radix2DitParallel<Val>;
 
-        //type Dft = Radix2Bowers;
         type Perm16 = Poseidon2<
             Val,
             Poseidon2ExternalLayerKoalaBear<16>,
@@ -116,7 +115,6 @@ mod tests {
     #[test]
     fn test_fri_inv_rate2() {
         println!("Test: FRI invRate = 2");
-
         test_fri(1, 256);
     }
 }
