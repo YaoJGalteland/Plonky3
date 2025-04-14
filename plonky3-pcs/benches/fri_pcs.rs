@@ -16,6 +16,12 @@ use plonky3_pcs::utilities::{LOG_TRACE_COLUMNS, LOG_TRACE_ROWS, Proof};
 use rand::SeedableRng;
 use rand::prelude::SmallRng;
 
+#[cfg(target_family = "unix")]
+use tikv_jemallocator::Jemalloc;
+#[cfg(target_family = "unix")]
+#[global_allocator]
+static GLOBAL: Jemalloc = Jemalloc;
+
 type F = KoalaBear;
 type Challenge = BinomialExtensionField<F, 4>;
 type Dft = Radix2DitParallel<F>;

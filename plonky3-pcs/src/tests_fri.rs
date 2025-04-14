@@ -22,6 +22,12 @@ mod tests {
     use tracing_subscriber::util::SubscriberInitExt;
     use tracing_subscriber::{EnvFilter, Registry};
 
+    #[cfg(target_family = "unix")]
+    use tikv_jemallocator::Jemalloc;
+    #[cfg(target_family = "unix")]
+    #[global_allocator]
+    static GLOBAL: Jemalloc = Jemalloc;
+
     use crate::utilities::{
         LOG_TRACE_COLUMNS, LOG_TRACE_ROWS, prove_random_trace, report_proof_size_example,
         verify_random_trace,

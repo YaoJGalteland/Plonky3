@@ -32,6 +32,8 @@ serde = { workspace = true, features = ["derive", "alloc"] }
 rand_chacha = "0.9.0"
 criterion = "0.5.1"
 tracing.workspace = true
+[target.'cfg(target_family = "unix")'.dependencies]
+tikv-jemallocator = "0.6"
 
 
 [[bench]]
