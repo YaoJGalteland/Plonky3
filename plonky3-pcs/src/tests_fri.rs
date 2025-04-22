@@ -88,7 +88,7 @@ mod tests {
         };
 
         // Generate a random trace matrix
-        let trace = RowMajorMatrix::rand(&mut rng, 1 << LOG_TRACE_ROWS, 1 << LOG_TRACE_COLUMNS);
+        let trace = RowMajorMatrix::rand(&mut rng, 1 << LOG_TRACE_ROWS, 1296);
         println!(
             "trace dimension: rows={:?}, columns={:?}",
             trace.values.len() / trace.width,
